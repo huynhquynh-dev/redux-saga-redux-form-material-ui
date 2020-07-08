@@ -1,0 +1,50 @@
+import * as taskApis from "./../apis/task";
+import * as taskConstants from "./../constants/task";
+
+export const fetchListTask = () => {
+    return {
+        type: taskConstants.FETCH_TASK,
+    };
+};
+
+export const fetchListTaskSuccess = (data) => {
+    return {
+        type: taskConstants.FETCH_TASK_SUCSESS,
+        payload: {
+            data,
+        },
+    };
+};
+
+export const fetchListTaskFailed = (error) => {
+    return {
+        type: taskConstants.FETCH_TASK_FAILED,
+        payload: {
+            error,
+        },
+    };
+};
+
+/**
+ * B1: Gọi fetchListTaskRequest()
+ * B2: Gọi fetchListTask => Reset: state tasks => []
+ * B3: Gọi API
+ * Nếu gọi api thành công thì fetchListTaskSuccess (data response)
+ * Nếu gọi api thất bại thì fetchListTaskFailed (error response)
+ */
+export const fetchListTaskRequest = () => {
+    return (dispatch) => {
+
+        // Reset: state tasks => []
+        dispatch(fetchListTask());
+        taskApis
+            .getList()
+            .then((response) => {
+                const { data } = response;
+                dispatch(fetchListTaskSuccess(data));
+            })
+            .catch((error) => {
+                dispatch(fetchListTaskFailed(error));
+            });
+    };
+};
