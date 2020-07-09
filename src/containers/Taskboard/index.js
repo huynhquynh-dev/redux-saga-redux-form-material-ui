@@ -24,6 +24,7 @@ import TaskForm from "../../components/TaskForm";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import * as taskActions from "./../../actions/task";
+import SearchBox from "../../components/SearchBox";
 
 class Taskboard extends Component {
     state = {
@@ -71,12 +72,33 @@ class Taskboard extends Component {
         return xhtml;
     };
 
-    componentDidMount() {
+    // componentDidMount() {
+    //     const { taskActionCreators } = this.props;
+    //     // Sau khi lấy được thì gọi ra để lấy dữ liệu
+    //     const { fetchListTask } = taskActionCreators;
+    //     fetchListTask();
+    // }
+
+    loadData = () => {
         const { taskActionCreators } = this.props;
-        const { fetchListTaskRequest } = taskActionCreators;
         // Sau khi lấy được thì gọi ra để lấy dữ liệu
-        fetchListTaskRequest();
-    }
+        const { fetchListTask } = taskActionCreators;
+        fetchListTask();
+    };
+
+    handleFilter = (event) => {
+        const { value } = event.target;
+        const { taskActionCreators } = this.props;
+        // Sau khi lấy được thì gọi ra để lấy dữ liệu
+        const { filterTask } = taskActionCreators;
+        filterTask(value);
+    };
+
+    renderSearchBox = () => {
+        let xhtml = null;
+        xhtml = <SearchBox handleChange={this.handleFilter} />;
+        return xhtml;
+    };
 
     render() {
         const { classes } = this.props;
@@ -87,10 +109,22 @@ class Taskboard extends Component {
                     variant="contained"
                     color="primary"
                     className={classes.button}
+                    onClick={() => this.loadData()}
+                    style={{
+                        marginRight: 30,
+                    }}
+                >
+                    Load Data
+                </Button>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    className={classes.button}
                     onClick={() => this.handleClickOpen()}
                 >
                     <AddIcon /> Thêm mới công việc
                 </Button>
+                {this.renderSearchBox()}
                 {this.renderBoard()}
                 {this.renderForm()}
             </div>
@@ -101,7 +135,8 @@ class Taskboard extends Component {
 Taskboard.propTypes = {
     classes: PropTypes.object,
     taskActionCreators: PropTypes.shape({
-        fetchListTaskRequest: PropTypes.func,
+        fetchListTask: PropTypes.func,
+        filterTask: PropTypes.func,
     }),
     listTask: PropTypes.array,
 };

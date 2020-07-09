@@ -21,6 +21,7 @@ import configStore from "../../redux/configStore";
 // Thư viện hiển thị thông báo
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import GlobalLoading from "../../components/GlobalLoading";
 
 const store = configStore();
 
@@ -30,6 +31,7 @@ class App extends PureComponent {
             <Provider store={store}>
                 <ThemeProvider theme={theme}>
                     <ToastContainer />
+                    <GlobalLoading />
                     <Taskboard />
                 </ThemeProvider>
             </Provider>

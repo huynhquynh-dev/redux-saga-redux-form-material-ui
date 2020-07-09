@@ -1,4 +1,4 @@
-import * as taskApis from "./../apis/task";
+// import * as taskApis from "./../apis/task";
 import * as taskConstants from "./../constants/task";
 
 export const fetchListTask = () => {
@@ -7,7 +7,7 @@ export const fetchListTask = () => {
     };
 };
 
-export const fetchListTaskSuccess = (data) => {
+export const fetchListTaskSuccess = data => {
     return {
         type: taskConstants.FETCH_TASK_SUCSESS,
         payload: {
@@ -16,7 +16,7 @@ export const fetchListTaskSuccess = (data) => {
     };
 };
 
-export const fetchListTaskFailed = (error) => {
+export const fetchListTaskFailed = error => {
     return {
         type: taskConstants.FETCH_TASK_FAILED,
         payload: {
@@ -32,19 +32,33 @@ export const fetchListTaskFailed = (error) => {
  * Nếu gọi api thành công thì fetchListTaskSuccess (data response)
  * Nếu gọi api thất bại thì fetchListTaskFailed (error response)
  */
-export const fetchListTaskRequest = () => {
-    return (dispatch) => {
+// export const fetchListTaskRequest = () => {
+//     return (dispatch) => {
 
-        // Reset: state tasks => []
-        dispatch(fetchListTask());
-        taskApis
-            .getList()
-            .then((response) => {
-                const { data } = response;
-                dispatch(fetchListTaskSuccess(data));
-            })
-            .catch((error) => {
-                dispatch(fetchListTaskFailed(error));
-            });
-    };
-};
+//         // Reset: state tasks => []
+//         dispatch(fetchListTask());
+//         taskApis
+//             .getList()
+//             .then((response) => {
+//                 const { data } = response;
+//                 dispatch(fetchListTaskSuccess(data));
+//             })
+//             .catch((error) => {
+//                 dispatch(fetchListTaskFailed(error));
+//             });
+//     };
+// };
+
+export const filterTask = keyword => ({
+    type: taskConstants.FILTER_TASK,
+    payload: {
+        keyword,
+    },
+});
+
+export const filterTaskSuccess = data => ({
+    type: taskConstants.FILTER_TASK_SUCCESS,
+    payload: {
+        data,
+    },
+});
