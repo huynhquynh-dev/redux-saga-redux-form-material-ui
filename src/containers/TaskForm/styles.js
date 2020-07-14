@@ -1,6 +1,7 @@
-// theme nhận từ ThemeProvider ở class App
 const styles = () => ({
-
+    textField: {
+        width: "100%",
+    },
 });
 
 export default styles;
