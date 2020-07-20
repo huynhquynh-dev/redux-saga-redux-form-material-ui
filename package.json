@@ -1,6 +1,7 @@
 {
   "name": "redux-saga-form-material-ui",
   "version": "0.1.0",
+  "homepage": "http://portfolio.huynhquynh.tk",
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.11.0",
@@ -40,5 +41,6 @@
       "last 1 safari version"
     ]
   },
-  "devDependencies": {}
+  "devDependencies": {},
+  "proxy": "https://5f0d7dd211b7f60016056ae8.mockapi.io"
 }

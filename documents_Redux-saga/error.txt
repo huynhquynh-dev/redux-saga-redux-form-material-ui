@@ -1,0 +1,2 @@
+Thêm file này vào trên file manager
+https://stackoverflow.com/questions/57090744/how-do-i-configure-my-htaccess-file-for-react-app-in-subdirectory

@@ -1,4 +1,5 @@
-export const API_ENDPOINT = "http://localhost:3000";
+export const API_ENDPOINT = "https://5f0d7dd211b7f60016056ae8.mockapi.io";
+// export const API_ENDPOINT = "http://localhost:3000";
 
 export const STATUS = [
     {

@@ -33,6 +33,8 @@ function* watchFetchListTaskAction() {
 
         // getList không được để dấu ngoặc đơn sẽ xảy ra lỗi
         const resp = yield call(getList);
+        console.log(resp);
+        
         const { status, data } = resp;
         if (status === STATUS_CODE.SUCCESS) {
             // Nếu gọi api thành công thì fetchListTaskSuccess (data response)
