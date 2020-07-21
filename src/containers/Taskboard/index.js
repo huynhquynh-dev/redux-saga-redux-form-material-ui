@@ -82,12 +82,12 @@ class Taskboard extends Component {
         fetchListTask();
     }
 
-    loadData = () => {
-        const { taskActionCreators } = this.props;
-        // Sau khi lấy được thì gọi ra để lấy dữ liệu
-        const { fetchListTask } = taskActionCreators;
-        fetchListTask();
-    };
+    // loadData = () => {
+    //     const { taskActionCreators } = this.props;
+    //     // Sau khi lấy được thì gọi ra để lấy dữ liệu
+    //     const { fetchListTask } = taskActionCreators;
+    //     fetchListTask();
+    // };
 
     handleFilter = (event) => {
         const { value } = event.target;
@@ -108,7 +108,7 @@ class Taskboard extends Component {
 
         return (
             <div className={classes.taskboard}>
-                <Button
+                {/* <Button
                     variant="contained"
                     color="primary"
                     className={classes.button}
@@ -118,7 +118,7 @@ class Taskboard extends Component {
                     }}
                 >
                     Load Data
-                </Button>
+                </Button> */}
                 <Button
                     variant="contained"
                     color="primary"

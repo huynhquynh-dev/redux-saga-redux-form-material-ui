@@ -6,13 +6,15 @@ import {
     delay,
     takeLatest,
     select,
+    takeEvery,
 } from "redux-saga/effects";
 import * as taskTypes from "./../constants/task";
-import { STATUS_CODE } from "./../constants";
+import { STATUS_CODE, STATUS } from "./../constants";
 
-import { getList } from "./../apis/task";
-import { fetchListTaskSuccess, fetchListTaskFailed, filterTaskSuccess } from "../actions/task";
+import { getListTask, addTask } from "./../apis/task";
+import { fetchListTaskSuccess, fetchListTaskFailed, filterTaskSuccess, addTaskSuccess, addTaskFailed } from "../actions/task";
 import { showLoading, hideLoading } from "./../actions/ui";
+import { hideModal } from "../actions/modal";
 
 /**
  * B1: Thực thi action fetch task
@@ -32,9 +34,8 @@ function* watchFetchListTaskAction() {
         yield put(showLoading());
 
         // getList không được để dấu ngoặc đơn sẽ xảy ra lỗi
-        const resp = yield call(getList);
-        console.log(resp);
-        
+        const resp = yield call(getListTask);
+
         const { status, data } = resp;
         if (status === STATUS_CODE.SUCCESS) {
             // Nếu gọi api thành công thì fetchListTaskSuccess (data response)
@@ -65,12 +66,37 @@ function* filterTaskSaga({ payload }) {
     yield put(filterTaskSuccess(listTaskFilter));
 }
 
+function* addTaskSaga( {payload} ) {
+    const { title, description } = payload;
+    // Hiển thị loading
+    yield put(showLoading());
+    const resp = yield call(addTask, {
+        title,
+        description,
+        // Thêm mới thì mặt định vào READY nên status = 0
+        status: STATUS[0].value
+    });
+    const { status, data } = resp;
+    if (status === STATUS_CODE.CREATED) {
+        yield put(addTaskSuccess(data));
+        // Đóng form lại. Chỉ cần gọi đến action đó
+        yield put(hideModal());
+    }
+    else {
+        yield put(addTaskFailed(data));
+    }
+    yield delay(500);
+    yield put(hideLoading());
+}
+
 function* rootSaga() {
     // Dùng fork là các hàm sẽ chạy song song nhau. Luôn lắng nge action
     yield fork(watchFetchListTaskAction);
     yield fork(watchCreateTaskAction);
     // Dùng takeLatest để khắc phục rẽ nhánh và lặp vô tận và thêm tính năng hơn so với fork. Luôn lắng nge action
     yield takeLatest(taskTypes.FILTER_TASK, filterTaskSaga);
+
+    yield takeEvery(taskTypes.ADD_TASK, addTaskSaga)
 }
 
 export default rootSaga;

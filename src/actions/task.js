@@ -49,6 +49,7 @@ export const fetchListTaskFailed = error => {
 //     };
 // };
 
+// Search =====>
 export const filterTask = keyword => ({
     type: taskConstants.FILTER_TASK,
     payload: {
@@ -62,3 +63,32 @@ export const filterTaskSuccess = data => ({
         data,
     },
 });
+
+// Add=======>
+export const addTask = (title, description) => {
+    return {
+        type: taskConstants.ADD_TASK,
+        payload: {
+            title,
+            description
+        }
+    };
+};
+
+export const addTaskSuccess = data => {
+    return {
+        type: taskConstants.ADD_TASK_SUCSESS,
+        payload: {
+            data,
+        },
+    };
+};
+
+export const addTaskFailed = error => {
+    return {
+        type: taskConstants.ADD_TASK_FAILED,
+        payload: {
+            error,
+        },
+    };
+};

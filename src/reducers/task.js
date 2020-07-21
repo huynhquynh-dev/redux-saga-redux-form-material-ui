@@ -13,7 +13,6 @@ const taskReducer = (state = initialState, action) => {
                 listTask: [],
             };
         }
-
         case taskConstants.FETCH_TASK_SUCSESS: {
             const { data } = action.payload;
             return {
@@ -21,7 +20,6 @@ const taskReducer = (state = initialState, action) => {
                 listTask: data,
             };
         }
-
         case taskConstants.FETCH_TASK_FAILED: {
             const { error } = action.payload;
             // Cài đặt react toastify để show error : npm install --save react-toastify
@@ -38,6 +36,30 @@ const taskReducer = (state = initialState, action) => {
             return {
                 ...state,
                 listTask: data,
+            };
+        }
+
+        case taskConstants.ADD_TASK: {
+            const { title, description } = action.payload;
+            return {
+                ...state,
+            };
+        }
+        case taskConstants.ADD_TASK_SUCSESS: {
+            const { data } = action.payload;
+            return {
+                ...state,
+
+                // listTask: state.listTask.concat([data])
+                // Đoạn trên phần tử thêm mới sẽ nằm dưới cùng. Vì vậy sử dụng đoạn dưới để nối phần tử
+                listTask: [data].concat(state.listTask)
+            };
+        }
+        case taskConstants.ADD_TASK_FAILED: {
+            const { error } = action.payload;
+            toastHelper.toastError(error);
+            return {
+                ...state,
             };
         }
 
