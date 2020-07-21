@@ -1,9 +1,13 @@
 // import * as taskApis from "./../apis/task";
 import * as taskConstants from "./../constants/task";
 
-export const fetchListTask = () => {
+// Thêm params = {} vào để dùng cho chức năng search, sort,... Params lấy từ URL
+export const fetchListTask = (params = {}) => {
     return {
         type: taskConstants.FETCH_TASK,
+        payload: {
+            params
+        }
     };
 };
 

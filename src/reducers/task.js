@@ -39,12 +39,6 @@ const taskReducer = (state = initialState, action) => {
             };
         }
 
-        case taskConstants.ADD_TASK: {
-            const { title, description } = action.payload;
-            return {
-                ...state,
-            };
-        }
         case taskConstants.ADD_TASK_SUCSESS: {
             const { data } = action.payload;
             return {

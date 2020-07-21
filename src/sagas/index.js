@@ -5,14 +5,21 @@ import {
     put,
     delay,
     takeLatest,
-    select,
+    // select,
     takeEvery,
 } from "redux-saga/effects";
 import * as taskTypes from "./../constants/task";
 import { STATUS_CODE, STATUS } from "./../constants";
 
 import { getListTask, addTask } from "./../apis/task";
-import { fetchListTaskSuccess, fetchListTaskFailed, filterTaskSuccess, addTaskSuccess, addTaskFailed } from "../actions/task";
+import {
+    fetchListTaskSuccess,
+    fetchListTaskFailed,
+    // filterTaskSuccess,
+    addTaskSuccess,
+    addTaskFailed,
+    fetchListTask,
+} from "../actions/task";
 import { showLoading, hideLoading } from "./../actions/ui";
 import { hideModal } from "../actions/modal";
 
@@ -30,11 +37,14 @@ function* watchFetchListTaskAction() {
     // Dùng lặp vô tận để khắc phục
     while (true) {
         // task dùng để lắng nghe action. Khi action được gọi thì sẽ chạy các dòng lệnh sau task
-        yield take(taskTypes.FETCH_TASK);
+        const action = yield take(taskTypes.FETCH_TASK);
+        const { params } = action.payload;
+
+        // showLoading phải nằm sau action taskTypes.FETCH_TASK để khi có action đó thì các hàm sau mới thực thi
         yield put(showLoading());
 
         // getList không được để dấu ngoặc đơn sẽ xảy ra lỗi
-        const resp = yield call(getListTask);
+        const resp = yield call(getListTask, params); // Truyền params vào getListTask trong hàm call
 
         const { status, data } = resp;
         if (status === STATUS_CODE.SUCCESS) {
@@ -57,16 +67,23 @@ function* watchCreateTaskAction() {
 function* filterTaskSaga({ payload }) {
     yield delay(500);
     const { keyword } = payload;
-    // select chỉ có nhiệm vụ lấy data store tại saga
-    const list = yield select((state) => state.task.listTask);
-    const listTaskFilter = list.filter((task) =>
-        task.title.trim().toLowerCase().includes(keyword.trim().toLowerCase())
+    yield put(
+        fetchListTask({
+            // q là theo quy tắc đặt tên của json-server
+            q: keyword,
+        })
     );
-    // Trả dữ liệu về cho reducer
-    yield put(filterTaskSuccess(listTaskFilter));
+    // const { keyword } = payload;
+    // // select chỉ có nhiệm vụ lấy data store tại saga
+    // const list = yield select((state) => state.task.listTask);
+    // const listTaskFilter = list.filter((task) =>
+    //     task.title.trim().toLowerCase().includes(keyword.trim().toLowerCase())
+    // );
+    // // Trả dữ liệu về cho reducer
+    // yield put(filterTaskSuccess(listTaskFilter));
 }
 
-function* addTaskSaga( {payload} ) {
+function* addTaskSaga({ payload }) {
     const { title, description } = payload;
     // Hiển thị loading
     yield put(showLoading());
@@ -74,15 +91,14 @@ function* addTaskSaga( {payload} ) {
         title,
         description,
         // Thêm mới thì mặt định vào READY nên status = 0
-        status: STATUS[0].value
+        status: STATUS[0].value,
     });
     const { status, data } = resp;
     if (status === STATUS_CODE.CREATED) {
         yield put(addTaskSuccess(data));
         // Đóng form lại. Chỉ cần gọi đến action đó
         yield put(hideModal());
-    }
-    else {
+    } else {
         yield put(addTaskFailed(data));
     }
     yield delay(500);
@@ -96,7 +112,7 @@ function* rootSaga() {
     // Dùng takeLatest để khắc phục rẽ nhánh và lặp vô tận và thêm tính năng hơn so với fork. Luôn lắng nge action
     yield takeLatest(taskTypes.FILTER_TASK, filterTaskSaga);
 
-    yield takeEvery(taskTypes.ADD_TASK, addTaskSaga)
+    yield takeEvery(taskTypes.ADD_TASK, addTaskSaga);
 }
 
 export default rootSaga;
