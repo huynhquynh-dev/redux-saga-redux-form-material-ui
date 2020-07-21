@@ -28,9 +28,68 @@ import SearchBox from "../../components/SearchBox";
 import * as modalActions from "./../../actions/modal";
 
 class Taskboard extends Component {
-    state = {
-        open: false,
+
+    // state = {
+    //     open: false,
+    // };
+
+    // handleClose = () => {
+    //     this.setState({
+    //         open: false,
+    //     });
+    // };
+
+    // renderForm = () => {
+    //     const { open } = this.state;
+    //     let xhtml = null;
+    //     xhtml = <TaskForm open={open} onCloseForm={this.handleClose} />;
+    //     return xhtml;
+    // };
+
+    // loadData = () => {
+    //     const { taskActionCreators } = this.props;
+    //     // Sau khi lấy được thì gọi ra để lấy dữ liệu
+    //     const { fetchListTask } = taskActionCreators;
+    //     fetchListTask();
+    // };
+
+    openForm = () => {
+        const { modalActionCreators } = this.props;
+        const { showModal, changeModalTitle, changeModalContent} = modalActionCreators;
+        const { setTaskEditing } = this.props.taskActionCreators;
+        setTaskEditing(null);
+        showModal();
+        changeModalTitle("Thêm mới công việc");
+        changeModalContent(<TaskForm />);
     };
+
+    handleFilter = (event) => {
+        const { value } = event.target;
+        const { taskActionCreators } = this.props;
+        // Sau khi lấy được thì gọi ra để lấy dữ liệu
+        const { filterTask } = taskActionCreators;
+        filterTask(value);
+    };
+
+    renderSearchBox = () => {
+        let xhtml = null;
+        xhtml = <SearchBox handleChange={this.handleFilter} />;
+        return xhtml;
+    };
+
+    handleEditTask = task => {
+        const { modalActionCreators, taskActionCreators } = this.props;
+        const { showModal, changeModalTitle, changeModalContent} = modalActionCreators;
+        const { setTaskEditing } = taskActionCreators;
+        setTaskEditing(task);
+        showModal();
+        changeModalTitle("Cập nhật công việc");
+        changeModalContent(<TaskForm />);
+    }
+
+    handleDeleteTask = task => {
+        console.log(task);
+    }
 
     renderBoard = () => {
         const { listTask } = this.props;
@@ -46,6 +105,8 @@ class Taskboard extends Component {
                             key={status.value}
                             tasks={taskFilterd}
                             status={status}
+                            onClickEdit = {this.handleEditTask}
+                            onClickDelete = {this.handleDeleteTask}
                         />
                     );
                 })}
@@ -54,54 +115,12 @@ class Taskboard extends Component {
         return xhtml;
     };
 
-    openForm = () => {
-        const { modalActionCreators } = this.props;
-        const { showModal, changeModalTitle, changeModalContent} = modalActionCreators;
-        showModal();
-        changeModalTitle("Thêm mới công việc");
-        changeModalContent(<TaskForm />);
-    };
-
-    handleClose = () => {
-        this.setState({
-            open: false,
-        });
-    };
-
-    // renderForm = () => {
-    //     const { open } = this.state;
-    //     let xhtml = null;
-    //     xhtml = <TaskForm open={open} onCloseForm={this.handleClose} />;
-    //     return xhtml;
-    // };
-
     componentDidMount() {
         const { taskActionCreators } = this.props;
         // Sau khi lấy được thì gọi ra để lấy dữ liệu
         const { fetchListTask } = taskActionCreators;
         fetchListTask();
     }
-
-    // loadData = () => {
-    //     const { taskActionCreators } = this.props;
-    //     // Sau khi lấy được thì gọi ra để lấy dữ liệu
-    //     const { fetchListTask } = taskActionCreators;
-    //     fetchListTask();
-    // };
-
-    handleFilter = (event) => {
-        const { value } = event.target;
-        const { taskActionCreators } = this.props;
-        // Sau khi lấy được thì gọi ra để lấy dữ liệu
-        const { filterTask } = taskActionCreators;
-        filterTask(value);
-    };
-
-    renderSearchBox = () => {
-        let xhtml = null;
-        xhtml = <SearchBox handleChange={this.handleFilter} />;
-        return xhtml;
-    };
 
     render() {
         const { classes } = this.props;

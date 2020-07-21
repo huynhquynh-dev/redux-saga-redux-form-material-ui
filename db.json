@@ -1,51 +1,27 @@
 {
   "tasks": [
     {
-      "id": "1",
-      "title": "Blutooth",
-      "description": "description 1",
-      "status": 0
-    },
-    {
-      "id": "2",
-      "title": "Project React JS",
-      "description": "description 2",
-      "status": 1
-    },
-    {
-      "id": "3",
-      "title": "React Redux Saga Material UI",
-      "description": "description 3",
-      "status": 2
-    },
-    {
-      "id": "4",
-      "title": "Node Express Backend",
-      "description": "description 4",
-      "status": 2
-    },
-    {
-      "id": "5",
-      "title": "MERN project",
-      "description": "description 5",
-      "status": 1
-    },
-    {
       "title": "Học lập trình ",
       "description": "ReactJS",
-      "status": 0,
+      "status": 1,
       "id": "4hvdn4j"
     },
     {
       "title": "Học SASS",
-      "status": 0,
+      "status": 2,
       "id": "vBGXxtO"
     },
     {
       "title": "Learning english",
-      "description": "123",
+      "description": "Học ở gò vấp",
       "status": 0,
       "id": "u5Syf9j"
+    },
+    {
+      "title": "Học SASS",
+      "description": "Học online youtube",
+      "status": 0,
+      "id": "SyIjIsj"
     }
   ]
 }

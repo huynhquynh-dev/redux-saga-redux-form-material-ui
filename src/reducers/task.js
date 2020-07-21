@@ -3,6 +3,7 @@ import * as toastHelper from "./../helpers/toastHelpper";
 
 const initialState = {
     listTask: [],
+    taskEditing: null,
 };
 
 const taskReducer = (state = initialState, action) => {
@@ -39,17 +40,62 @@ const taskReducer = (state = initialState, action) => {
             };
         }
 
+        case taskConstants.ADD_TASK: {
+            return {
+                ...state,
+                // taskEditing: null,
+            };
+        }
         case taskConstants.ADD_TASK_SUCSESS: {
             const { data } = action.payload;
             return {
                 ...state,
-
                 // listTask: state.listTask.concat([data])
                 // Đoạn trên phần tử thêm mới sẽ nằm dưới cùng. Vì vậy sử dụng đoạn dưới để nối phần tử
-                listTask: [data].concat(state.listTask)
+                listTask: [data].concat(state.listTask),
             };
         }
         case taskConstants.ADD_TASK_FAILED: {
+            const { error } = action.payload;
+            toastHelper.toastError(error);
+            return {
+                ...state,
+            };
+        }
+
+        case taskConstants.SET_TASK_EDITING: {
+            const { task } = action.payload;
+            return {
+                ...state,
+                taskEditing: task,
+            };
+        }
+
+        case taskConstants.UPDATE_TASK: {
+            return {
+                ...state,
+            };
+        }
+        case taskConstants.UPDATE_TASK_SUCSESS: {
+            const { data } = action.payload;
+            const { listTask } = state;
+            const index = listTask.findIndex((item) => item.id === data.id);
+            if (index !== -1) {
+                const newList = [
+                    ...listTask.slice(0, index),
+                    data,
+                    ...listTask.slice(index + 1),
+                ];
+                return {
+                    ...state,
+                    listTask: newList,
+                };
+            }
+            return {
+                ...state,
+            };
+        }
+        case taskConstants.UPDATE_TASK_FAILED: {
             const { error } = action.payload;
             toastHelper.toastError(error);
             return {

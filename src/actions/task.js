@@ -1,6 +1,8 @@
 // import * as taskApis from "./../apis/task";
 import * as taskConstants from "./../constants/task";
+import { STATUS } from './../constants'
 
+// Show ===========================================================>
 // Thêm params = {} vào để dùng cho chức năng search, sort,... Params lấy từ URL
 export const fetchListTask = (params = {}) => {
     return {
@@ -53,7 +55,7 @@ export const fetchListTaskFailed = error => {
 //     };
 // };
 
-// Search =====>
+// Search ===========================================================>
 export const filterTask = keyword => ({
     type: taskConstants.FILTER_TASK,
     payload: {
@@ -68,7 +70,7 @@ export const filterTaskSuccess = data => ({
     },
 });
 
-// Add=======>
+// Add========================================================>
 export const addTask = (title, description) => {
     return {
         type: taskConstants.ADD_TASK,
@@ -78,7 +80,6 @@ export const addTask = (title, description) => {
         }
     };
 };
-
 export const addTaskSuccess = data => {
     return {
         type: taskConstants.ADD_TASK_SUCSESS,
@@ -87,10 +88,47 @@ export const addTaskSuccess = data => {
         },
     };
 };
-
 export const addTaskFailed = error => {
     return {
         type: taskConstants.ADD_TASK_FAILED,
+        payload: {
+            error,
+        },
+    };
+};
+
+// Edit==============================================================>
+export const setTaskEditing = task => {
+    return {
+        type: taskConstants.SET_TASK_EDITING,
+        payload: {
+            task,
+        },
+    };
+};
+
+// Update===========================================================>
+export const updateTask = (title, description, status = STATUS[0].vlaue ) => {
+    return {
+        type: taskConstants.UPDATE_TASK,
+        payload: {
+            title,
+            description,
+            status
+        }
+    };
+};
+export const updateTaskSuccess = data => {
+    return {
+        type: taskConstants.UPDATE_TASK_SUCSESS,
+        payload: {
+            data,
+        },
+    };
+};
+export const updateTaskFailed = error => {
+    return {
+        type: taskConstants.UPDATE_TASK_FAILED,
         payload: {
             error,
         },

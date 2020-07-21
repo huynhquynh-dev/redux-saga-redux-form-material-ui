@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 
 import styles from "./styles";
-import { withStyles, Grid, Button, Box } from "@material-ui/core";
+import { withStyles, Grid, Button, Box, MenuItem } from "@material-ui/core";
 
 import { connect } from "react-redux";
 import { compose, bindActionCreators } from "redux";
@@ -11,16 +11,21 @@ import * as taskActions from "../../actions/task";
 // Redux-Form
 import { Field, reduxForm } from "redux-form";
 import renderTextField from "../../components/FormHelper/TextField";
-import validate from './validate';
+import validate from "./validate";
+import renderSelectField from "../../components/FormHelper/SelectField";
 
 class TaskForm extends Component {
-
-    handleSubmitForm = data => {
-        const {taskActionCreators} = this.props;
-        const { addTask } = taskActionCreators;
-        const { title, description } = data;
-        addTask(title, description);
-    }
+    handleSubmitForm = (data) => {
+        const { taskActionCreators, taskEditing } = this.props;
+        const { addTask, updateTask } = taskActionCreators;
+        const { title, description, status } = data;
+        if (taskEditing && taskEditing.id) {
+            updateTask(title, description, status);
+        }
+        else {
+            addTask(title, description);
+        }
+    };
     // Validate từng field
     // required = value => {
     //     let error = 'Vui lòng nhập tiêu đề';
@@ -37,19 +42,49 @@ class TaskForm extends Component {
     //     return error;
     // }
 
+    renderStatusSelection() {
+        let xhtml = null;
+        const { classes, taskEditing } = this.props;
+        if (taskEditing && taskEditing.id) {
+            xhtml = (
+                <Grid item md={12}>
+                    <Field
+                        id="status"
+                        label="Trạng thái"
+                        className={classes.select}
+                        name="status"
+                        component={renderSelectField}
+                    >
+                        <MenuItem value="" />
+                        <MenuItem value={0}>READY</MenuItem>
+                        <MenuItem value={1}>IN PROGRESS</MenuItem>
+                        <MenuItem value={2}>COMPLETED</MenuItem>
+                    </Field>
+                </Grid>
+            );
+        }
+        return xhtml;
+    }
+
     render() {
         // handleSubmit là hàm của redux-form tự tạo
         // invalid thể hiện form đã hợp lệ để submit chưa
         // submitting thể hiện trạng thái có đang submit hay k và cản lại submit nhiều lần khi đang submit
-        const { classes, modalActionCreators, handleSubmit, invalid, submitting } = this.props;
+        const {
+            classes,
+            modalActionCreators,
+            handleSubmit,
+            invalid,
+            submitting,
+        } = this.props;
         const { hideModal } = modalActionCreators;
 
         return (
-            <form onSubmit={handleSubmit(this.handleSubmitForm)} >
+            <form onSubmit={handleSubmit(this.handleSubmitForm)}>
                 <Grid container>
                     <Grid item md={12}>
                         <Field
-                            id='title'
+                            id="title"
                             label="Tiêu đề"
                             margin="normal"
                             className={classes.textField}
@@ -57,11 +92,12 @@ class TaskForm extends Component {
                             name="title"
                             component={renderTextField}
                             // validate={[this.required, this.minLength5]}
+                            // value={taskEditing ? taskEditing.title : '' }
                         />
                     </Grid>
                     <Grid item md={12}>
                         <Field
-                            id='description'
+                            id="description"
                             label="Mô tả"
                             className={classes.textField}
                             margin="normal"
@@ -69,8 +105,12 @@ class TaskForm extends Component {
                             rowsMax={4}
                             name="description"
                             component={renderTextField}
+                            // value={taskEditing ? taskEditing.description : ''}
                         />
                     </Grid>
+
+                    {this.renderStatusSelection()}
+
                     <Grid item md={12}>
                         <Box mt={1} display="flex" flexDirection="row-reverse">
                             <Box>
@@ -82,7 +122,7 @@ class TaskForm extends Component {
                                 <Button
                                     variant="contained"
                                     color="primary"
-                                    type='submit'
+                                    type="submit"
                                     disabled={invalid || submitting}
                                 >
                                     Lưu lại
@@ -96,7 +136,20 @@ class TaskForm extends Component {
     }
 }
 
-const mapStateToProps = null;
+const mapStateToProps = (state) => {
+    return {
+        taskEditing: state.task.taskEditing,
+        initialValues: {
+            title: state.task.taskEditing ? state.task.taskEditing.title : null,
+            description: state.task.taskEditing
+                ? state.task.taskEditing.description
+                : null,
+            status: state.task.taskEditing
+                ? state.task.taskEditing.status
+                : null,
+        },
+    };
+};
 
 const mapDispatchToProps = (dispatch) => ({
     modalActionCreators: bindActionCreators(modalActions, dispatch),
@@ -109,11 +162,11 @@ const withConnect = connect(mapStateToProps, mapDispatchToProps);
 const FORM_NAME = "TASK_MANAGEMENT";
 const withReduxForm = reduxForm({
     form: FORM_NAME,
-    validate
+    validate,
 });
 
 export default compose(
     withStyles(styles),
     withConnect,
-    withReduxForm,
+    withReduxForm
 )(TaskForm);
