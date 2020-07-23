@@ -95,7 +95,11 @@ class Taskboard extends Component {
     };
 
     handleDeleteTask = task => {
-        console.log(task);
+        const { id } = task;
+        console.log(id);
+        const { taskActionCreators } = this.props;
+        const { deleteTask } = taskActionCreators;
+        deleteTask(id);
     }
 
     openFormDeleteTask = (task) => {

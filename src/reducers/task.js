@@ -48,6 +48,7 @@ const taskReducer = (state = initialState, action) => {
         }
         case taskConstants.ADD_TASK_SUCSESS: {
             const { data } = action.payload;
+            toastHelper.toastSuccess("Thêm mới công việc thành công");
             return {
                 ...state,
                 // listTask: state.listTask.concat([data])
@@ -86,6 +87,7 @@ const taskReducer = (state = initialState, action) => {
                     data,
                     ...listTask.slice(index + 1),
                 ];
+                toastHelper.toastSuccess("Cập nhật công việc thành công");
                 return {
                     ...state,
                     listTask: newList,
@@ -96,6 +98,27 @@ const taskReducer = (state = initialState, action) => {
             };
         }
         case taskConstants.UPDATE_TASK_FAILED: {
+            const { error } = action.payload;
+            toastHelper.toastError(error);
+            return {
+                ...state,
+            };
+        }
+
+        case taskConstants.DELETE_TASK: {
+            return {
+                ...state,
+            };
+        }
+        case taskConstants.DELETE_TASK_SUCSESS: {
+            const { id } = action.payload;
+            toastHelper.toastSuccess("Xóa công việc thành công");
+            return {
+                ...state,
+                listTask: state.listTask.filter(item => item.id !== id),
+            };
+        }
+        case taskConstants.DELETE_TASK_FAILED: {
             const { error } = action.payload;
             toastHelper.toastError(error);
             return {

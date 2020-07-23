@@ -11,7 +11,7 @@ import {
 import * as taskTypes from "./../constants/task";
 import { STATUS_CODE, STATUS } from "./../constants";
 
-import { getListTask, addTask, updateTask } from "./../apis/task";
+import { getListTask, addTask, updateTask, deleteTask } from "./../apis/task";
 import {
     fetchListTaskSuccess,
     fetchListTaskFailed,
@@ -21,6 +21,8 @@ import {
     fetchListTask,
     updateTaskSuccess,
     updateTaskFailed,
+    deleteTaskSuccess,
+    deleteTaskFailed,
 } from "../actions/task";
 import { showLoading, hideLoading } from "./../actions/ui";
 import { hideModal } from "../actions/modal";
@@ -112,15 +114,12 @@ function* updateTaskSaga({ payload }) {
     // select chỉ có nhiệm vụ lấy data store tại saga
     const taskEditing = yield select((state) => state.task.taskEditing);
     yield put(showLoading());
-    const resp = yield call(
-        updateTask,
-        {
-            id: taskEditing.id,
-            title,
-            description,
-            status
-        }
-    );
+    const resp = yield call(updateTask, {
+        id: taskEditing.id,
+        title,
+        description,
+        status,
+    });
     const { status: statusCode, data } = resp;
     if (statusCode === STATUS_CODE.SUCCESS) {
         yield put(updateTaskSuccess(data));
@@ -128,6 +127,22 @@ function* updateTaskSaga({ payload }) {
         yield put(hideModal());
     } else {
         yield put(updateTaskFailed(data));
+    }
+    yield delay(500);
+    yield put(hideLoading());
+}
+
+function* deleteTaskSaga({ payload }) {
+    const { id } = payload;
+    yield put(showLoading());
+    const resp = yield call(deleteTask, id);
+    const { status: statusCode, data } = resp;
+    if (statusCode === STATUS_CODE.SUCCESS) {
+        yield put(deleteTaskSuccess(id));
+        // Đóng form lại. Chỉ cần gọi đến action đó
+        yield put(hideModal());
+    } else {
+        yield put(deleteTaskFailed(data));
     }
     yield delay(500);
     yield put(hideLoading());
@@ -143,6 +158,7 @@ function* rootSaga() {
     yield takeEvery(taskTypes.ADD_TASK, addTaskSaga);
 
     yield takeLatest(taskTypes.UPDATE_TASK, updateTaskSaga);
+    yield takeLatest(taskTypes.DELETE_TASK, deleteTaskSaga);
 }
 
 export default rootSaga;

@@ -27,3 +27,7 @@ export const addTask = data => {
 export const updateTask = data => {
     return axiosService.put(`${API_ENDPOINT}/${urlUpdate}`, data);
 }
+
+export const deleteTask = id => {
+    return axiosService.delete(`${API_ENDPOINT}/${urlDelete}/${id}`);
+}
