@@ -1,17 +1,32 @@
-// export const API_ENDPOINT = "https://5f0d7dd211b7f60016056ae8.mockapi.io";
-export const API_ENDPOINT = "http://localhost:3000";
+// export const API_ENDPOINT = "http://localhost:3000";
 
+// export const STATUS = [
+//     {
+//         value: 0,
+//         lable: "READY",
+//     },
+//     {
+//         value: 1,
+//         lable: "IN PROGRESS",
+//     },
+//     {
+//         value: 2,
+//         lable: "COMPLETED",
+//     },
+// ];
+
+export const API_ENDPOINT = "http://huynhquynh.tk";
 export const STATUS = [
     {
-        value: 0,
+        value: "0",
         lable: "READY",
     },
     {
-        value: 1,
+        value: "1",
         lable: "IN PROGRESS",
     },
     {
-        value: 2,
+        value: "2",
         lable: "COMPLETED",
     },
 ];

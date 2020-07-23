@@ -61,10 +61,10 @@ function* watchFetchListTaskAction() {
     }
 }
 
-function* watchCreateTaskAction() {
-    yield true;
-    console.log("Task Action");
-}
+// function* watchCreateTaskAction() {
+//     yield true;
+//     console.log("Task Action");
+// }
 
 function* filterTaskSaga({ payload }) {
     yield delay(500);
@@ -96,7 +96,7 @@ function* addTaskSaga({ payload }) {
         status: STATUS[0].value,
     });
     const { status, data } = resp;
-    if (status === STATUS_CODE.CREATED) {
+    if (status === STATUS_CODE.SUCCESS) {
         yield put(addTaskSuccess(data));
         // Đóng form lại. Chỉ cần gọi đến action đó
         yield put(hideModal());
@@ -115,11 +115,11 @@ function* updateTaskSaga({ payload }) {
     const resp = yield call(
         updateTask,
         {
+            id: taskEditing.id,
             title,
             description,
             status
-        },
-        taskEditing.id
+        }
     );
     const { status: statusCode, data } = resp;
     if (statusCode === STATUS_CODE.SUCCESS) {
@@ -136,7 +136,7 @@ function* updateTaskSaga({ payload }) {
 function* rootSaga() {
     // Dùng fork là các hàm sẽ chạy song song nhau. Luôn lắng nge action
     yield fork(watchFetchListTaskAction);
-    yield fork(watchCreateTaskAction);
+    // yield fork(watchCreateTaskAction);
     // Dùng takeLatest để khắc phục rẽ nhánh và lặp vô tận và thêm tính năng hơn so với fork. Luôn lắng nge action
     yield takeLatest(taskTypes.FILTER_TASK, filterTaskSaga);
 

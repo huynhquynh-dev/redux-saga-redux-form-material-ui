@@ -108,7 +108,7 @@ export const setTaskEditing = task => {
 };
 
 // Update===========================================================>
-export const updateTask = (title, description, status = STATUS[0].vlaue ) => {
+export const updateTask = (title, description, status = STATUS[0].value ) => {
     return {
         type: taskConstants.UPDATE_TASK,
         payload: {

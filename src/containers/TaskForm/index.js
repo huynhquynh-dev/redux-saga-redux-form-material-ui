@@ -56,9 +56,9 @@ class TaskForm extends Component {
                         component={renderSelectField}
                     >
                         <MenuItem value="" />
-                        <MenuItem value={0}>READY</MenuItem>
-                        <MenuItem value={1}>IN PROGRESS</MenuItem>
-                        <MenuItem value={2}>COMPLETED</MenuItem>
+                        <MenuItem value={"0"}>READY</MenuItem>
+                        <MenuItem value={"1"}>IN PROGRESS</MenuItem>
+                        <MenuItem value={"2"}>COMPLETED</MenuItem>
                     </Field>
                 </Grid>
             );

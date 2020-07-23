@@ -2,7 +2,14 @@ import axiosService from './../commons/axiosService';
 import { API_ENDPOINT } from './../constants';
 import queryString from 'query-string';
 
-const url = 'tasks';
+// const urlRead = 'tasks';
+// const urlInsert = 'tasks';
+// const urlUpdate = 'tasks';
+// const urlDelete = 'tasks';
+const urlRead = 'read.php';
+const urlInsert = 'insert.php';
+const urlUpdate = 'update.php';
+const urlDelete = 'delete.php';
 
 export const getListTask = (params = {}) => {
     let queryParams = '';
@@ -10,13 +17,13 @@ export const getListTask = (params = {}) => {
         // Chuyển object thành câu query dùng thư viên query-string
         queryParams = `?${queryString.stringify(params)}`;
     }
-    return axiosService.get(`${API_ENDPOINT}/${url}${queryParams}`);
+    return axiosService.get(`${API_ENDPOINT}/${urlRead}${queryParams}`);
 }
 
 export const addTask = data => {
-    return axiosService.post(`${API_ENDPOINT}/${url}`, data);
+    return axiosService.post(`${API_ENDPOINT}/${urlInsert}`, data);
 }
 
-export const updateTask = (data, taskId) => {
-    return axiosService.put(`${API_ENDPOINT}/${url}/${taskId}`, data);
+export const updateTask = data => {
+    return axiosService.put(`${API_ENDPOINT}/${urlUpdate}`, data);
 }
