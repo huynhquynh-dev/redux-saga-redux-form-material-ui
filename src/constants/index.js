@@ -15,7 +15,7 @@
 //     },
 // ];
 
-export const API_ENDPOINT = "http://huynhquynh.tk";
+export const API_ENDPOINT = "https://huynhquynh.tk";
 export const STATUS = [
     {
         value: "0",
