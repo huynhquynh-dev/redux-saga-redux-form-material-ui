@@ -12,30 +12,54 @@ import styles from "./styles";
 import { withStyles } from "@material-ui/core";
 
 import { ThemeProvider } from "@material-ui/core/styles";
-import Taskboard from "../Taskboard";
 import theme from "../../commons/Theme";
+import CssBaseline from '@material-ui/core/CssBaseline';
 
 import { Provider } from "react-redux";
 import configStore from "../../redux/configStore";
 
 // Thư viện hiển thị thông báo
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import GlobalLoading from "../../components/GlobalLoading";
 import CommonModal from "../../components/CommonModal";
+
+import { BrowserRouter, Switch } from "react-router-dom";
+
+import { ADMIN_ROUTES } from "./../../constants";
+import AdminLayoutRoute from "../../commons/Layout/AdminLayoutRoute";
 
 const store = configStore();
 
 class App extends PureComponent {
+    renderAdminRoutes() {
+        let xhtml = null;
+        xhtml = ADMIN_ROUTES.map((route) => {
+            return (
+                <AdminLayoutRoute
+                    key={route.path}
+                    name={route.name}
+                    path={route.path}
+                    exact={route.exact}
+                    component={route.component}
+                />
+            );
+        });
+        return xhtml;
+    }
+
     render() {
         return (
             <Provider store={store}>
-                <ThemeProvider theme={theme}>
-                    <ToastContainer />
-                    <GlobalLoading />
-                    <CommonModal />
-                    <Taskboard />
-                </ThemeProvider>
+                <BrowserRouter>
+                    <ThemeProvider theme={theme}>
+                        <CssBaseline />
+                        <ToastContainer />
+                        <GlobalLoading />
+                        <CommonModal />
+                        <Switch>{this.renderAdminRoutes()}</Switch>
+                    </ThemeProvider>
+                </BrowserRouter>
             </Provider>
         );
     }
