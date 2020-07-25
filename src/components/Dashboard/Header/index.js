@@ -91,6 +91,13 @@ class Header extends Component {
         );
     };
 
+    handleToggleSidebar = () => {
+        const { showSidebar, onToggleSidebar } = this.props;
+        if(onToggleSidebar) {
+            onToggleSidebar(!showSidebar)
+        }
+    }
+
     render() {
         const { classes, name } = this.props;
         return (
@@ -102,6 +109,7 @@ class Header extends Component {
                             className={classes.menuButton}
                             color="inherit"
                             aria-label="open drawer"
+                            onClick={this.handleToggleSidebar}
                         >
                             <MenuIcon />
                         </IconButton>

@@ -2,6 +2,7 @@ import * as uiConstants from "./../constants/ui";
 
 const initialState = {
     showLoading: false,
+    showSidebar: false,
 };
 
 const reducer = (state = initialState, action) => {
@@ -15,6 +16,16 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 showLoading: false,
+            };
+        case uiConstants.SHOW_SIDEBAR:
+            return {
+                ...state,
+                showSidebar: true,
+            };
+        case uiConstants.HIDE_SIDEBAR:
+            return {
+                ...state,
+                showSidebar: false,
             };
 
         default:

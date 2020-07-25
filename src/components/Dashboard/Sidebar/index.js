@@ -11,17 +11,12 @@ import ListItem from "@material-ui/core/ListItem";
 import { NavLink } from "react-router-dom";
 
 class Sidebar extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            open: true,
-        };
-    }
 
     toggleDrawer = (value) => {
-        this.setState({
-            open: value,
-        });
+        const { onToggleSidebar } = this.props;
+        if(onToggleSidebar) {
+            onToggleSidebar(value);
+        }
     };
 
     renderList() {
@@ -52,11 +47,10 @@ class Sidebar extends Component {
     }
 
     render() {
-        const { open } = this.state;
-        const { classes } = this.props;
+        const { classes, showSidebar } = this.props;
         return (
             <Drawer
-                open={open}
+                open={showSidebar}
                 onClose={() => this.toggleDrawer(false)}
                 classes={{
                     paper: classes.drawerPaper,
