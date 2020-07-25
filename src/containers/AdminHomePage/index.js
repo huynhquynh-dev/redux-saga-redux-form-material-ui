@@ -6,7 +6,7 @@ class AdminHomePage extends Component {
     render() {
         return (
             <div>
-                <h1>Admin home page</h1>
+                <h1>Vào menu để chuyển xem danh sách công việc</h1>
             </div>
         );
     }

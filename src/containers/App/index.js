@@ -13,7 +13,7 @@ import { withStyles } from "@material-ui/core";
 
 import { ThemeProvider } from "@material-ui/core/styles";
 import theme from "../../commons/Theme";
-import CssBaseline from '@material-ui/core/CssBaseline';
+import CssBaseline from "@material-ui/core/CssBaseline";
 
 import { Provider } from "react-redux";
 import configStore from "../../redux/configStore";
@@ -26,8 +26,9 @@ import CommonModal from "../../components/CommonModal";
 
 import { BrowserRouter, Switch } from "react-router-dom";
 
-import { ADMIN_ROUTES } from "./../../constants";
+import { ADMIN_ROUTES, ROUTES } from "./../../constants";
 import AdminLayoutRoute from "../../commons/Layout/AdminLayoutRoute";
+import DefaultLayoutRoute from "../../commons/Layout/DefaultLayoutRoute";
 
 const store = configStore();
 
@@ -37,6 +38,21 @@ class App extends PureComponent {
         xhtml = ADMIN_ROUTES.map((route) => {
             return (
                 <AdminLayoutRoute
+                    key={route.path}
+                    name={route.name}
+                    path={route.path}
+                    exact={route.exact}
+                    component={route.component}
+                />
+            );
+        });
+        return xhtml;
+    }
+    renderDefaultRoutes() {
+        let xhtml = null;
+        xhtml = ROUTES.map((route) => {
+            return (
+                <DefaultLayoutRoute
                     key={route.path}
                     name={route.name}
                     path={route.path}
@@ -57,7 +73,10 @@ class App extends PureComponent {
                         <ToastContainer />
                         <GlobalLoading />
                         <CommonModal />
-                        <Switch>{this.renderAdminRoutes()}</Switch>
+                        <Switch>
+                            {this.renderAdminRoutes()}
+                            {this.renderDefaultRoutes()}
+                        </Switch>
                     </ThemeProvider>
                 </BrowserRouter>
             </Provider>

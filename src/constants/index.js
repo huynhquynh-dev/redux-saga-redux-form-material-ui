@@ -1,5 +1,7 @@
 import AdminHomePage from "../containers/AdminHomePage";
 import Taskboard from "../containers/Taskboard";
+import LoginPage from "../containers/LoginPage";
+import SignupPage from "../containers/SignupPage";
 
 export const API_ENDPOINT = "https://huynhquynh.tk";
 export const STATUS = [
@@ -25,15 +27,30 @@ export const STATUS_CODE = {
 
 export const ADMIN_ROUTES = [
     {
-        path: "/",
+        path: "/admin",
         name: "Trang quản trị",
         exact: true,
         component: AdminHomePage,
     },
     {
-        path: "/task-board",
+        path: "/admin/task-board",
         name: "Quản lý công việc",
         exact: false,
         component: Taskboard,
+    },
+];
+
+export const ROUTES = [
+    {
+        path: "/login",
+        name: "Đăng nhập",
+        exact: false,
+        component: LoginPage,
+    },
+    {
+        path: "/signup",
+        name: "Đăng ký",
+        exact: false,
+        component: SignupPage,
     },
 ];
